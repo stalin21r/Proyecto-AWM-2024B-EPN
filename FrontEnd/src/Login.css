@@ -1,0 +1,88 @@
+.login-container {
+  display: flex;
+  height: 100vh;
+  background-color: #0b0d36;
+  /* Fondo azul oscuro */
+}
+
+.left-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.wolf-avatar {
+  height: 70%;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.electronica-text {
+  width: 80%;
+  height: auto;
+}
+
+.right-section {
+  flex: 1.4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-image: url(./assets/cloud.png);
+  background-repeat: no-repeat;
+  background-position-y: 11%;
+  background-size: 175% 125%;
+  background-position-x: 10%;
+  padding: 20px;
+}
+
+.right-section-content {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10vw;
+  margin-right: 0;
+}
+
+.aeie-logo {
+  width: 150px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 70%;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  font-size: 1em;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.login-form button {
+  width: 100%;
+  padding: 10px;
+  background-color: #0b0d36;
+  /* Azul oscuro */
+  color: #ffffff;
+  font-size: 1em;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.login-form button:hover {
+  background-color: #000066;
+  /* Azul más oscuro para el efecto hover */
+}
