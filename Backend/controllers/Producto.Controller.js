@@ -1,5 +1,6 @@
 const sharp = require('sharp');
 const Producto = require('../models/Producto.Model');
+const { Op } = require('sequelize');
 
 // Crear Producto
 exports.createProducto = async (req, res) => {
@@ -65,8 +66,16 @@ exports.createProducto = async (req, res) => {
 
 // Obtener todos los Productos
 exports.getAllProductos = async (req, res) => {
+  const { categoria, pattern } = req.query;
+  const whereClause = {};
+  if (categoria) {
+    whereClause.categoria = categoria;
+  }
+  if (pattern) {
+    whereClause.nombre = { [Op.iLike]: `%${pattern}%` }; // Usamos Op.iLike para coincidencias insensibles a mayúsculas/minúsculas
+  }
   try {
-    const productos = await Producto.findAll();
+    const productos = await Producto.findAll({ where: whereClause });
 
     if (!productos.length) {
       return res.status(404).json({ message: 'No hay productos disponibles.' });
@@ -87,7 +96,7 @@ exports.getAllProductos = async (req, res) => {
       };
     });
 
-    res.status(200).json(productosConImagenes);
+    res.status(200).json({message: 'Productos retornados con exito', productos: productosConImagenes});
   } catch (error) {
     res.status(500).json({ 
       message: 'Error al obtener los productos.', 

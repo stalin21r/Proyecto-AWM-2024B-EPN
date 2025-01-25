@@ -1,45 +1,57 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db.config');
+const CasilleroBloque = require('./CasilleroBloque.Model');
 
-const Casillero = sequelize.define('Casillero', {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
-  },
-  bloque: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'bloques', // nombre de la tabla referenciada
-      key: 'id'
+const Casillero = sequelize.define(
+  'Casillero',
+  {
+    bloque: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: CasilleroBloque,
+        key: 'id',
+      },
+      allowNull: false,
+      onDelete: 'CASCADE',
     },
-    onDelete: 'CASCADE'
+    numero: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    ocupado: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    propietario: {
+      type: DataTypes.STRING(50),
+      allowNull: true,
+    },
+    correo: {
+      type: DataTypes.STRING(50),
+      allowNull: true,
+      validate: {
+        isEmail: true,
+      },
+    },
+    telefono: {
+      type: DataTypes.STRING(20),
+      allowNull: true,
+      validate: {
+        is: /^[0-9\-+()\s]*$/,
+      },
+    },
   },
-  numero: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
-  ocupado: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false
-  },
-  propietario: {
-    type: DataTypes.STRING(50),
-    allowNull: true
-  },
-  correo: {
-    type: DataTypes.STRING(50),
-    allowNull: true
-  },
-  telefono: {
-    type: DataTypes.STRING(20),
-    allowNull: true
+  {
+    tableName: 'casilleros',
+    schema: 'private',
+    timestamps: false,
   }
-}, {
-  tableName: 'casilleros', // nombre de la tabla en la base de datos
-  schema: 'private', // nombre del esquema en la base de datos
-  timestamps: false // si no hay columnas de marca de tiempo como createdAt y updatedAt
+);
+
+// Define the association
+Casillero.belongsTo(CasilleroBloque, {
+  foreignKey: 'bloque',
+  targetKey: 'id',
 });
 
 module.exports = Casillero;

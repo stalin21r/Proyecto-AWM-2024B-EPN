@@ -30,7 +30,7 @@ exports.getProductosCategorias = async (req, res) => {
       .status(200)
       .json({
         message: 'Categorias obtenidas correctamente.',
-        productosCategorias,
+        categorias: productosCategorias,
       });
   } catch (error) {
     res
