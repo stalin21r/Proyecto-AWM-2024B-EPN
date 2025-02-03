@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "../Login.css"; // Importa los estilos específicos para este componente
 import lobo from "../assets/loboLogin.png";
 import electronicaText from "../assets/electronica-text.png";
 import logoAeie from "../assets/logo.png";
 import axios from "axios";
 import { Snackbar, Alert } from "@mui/material";
+const API_URL = 'http://localhost:3000'
+//const API_URL = 'https://95dcnbjt-3000.use2.devtunnels.ms'
 
 export function Login() {
   const [formData, setFormData] = useState({ User: "", Password: "" });
@@ -18,7 +20,7 @@ export function Login() {
   const ingresar = async (e) => {
     e.preventDefault(); // Prevenir el comportamiento predeterminado del formulario
     try {
-      const response = await axios.post("http://localhost:3000/api/login", {
+      const response = await axios.post(`${API_URL}/api/login`, {
         usuario: formData.User,
         contrasena: formData.Password,
       });

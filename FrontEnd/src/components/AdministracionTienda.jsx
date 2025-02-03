@@ -1,11 +1,13 @@
 import axios from 'axios';
 import { ItemSearch } from './ItemSearch';
 import { Productos } from './Productos';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Snackbar,
   Alert,
 } from '@mui/material';
+const API_URL = 'http://localhost:3000'
+//const API_URL = 'https://95dcnbjt-3000.use2.devtunnels.ms'
 
 export function AdministracionTienda() {
   const [productos, setProductos] = useState([]);
@@ -14,11 +16,10 @@ export function AdministracionTienda() {
   const [categorias, setCategorias] = useState([]);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });  
 
-
   // Cargar categorías al montar el componente
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/api/producto-categorias`, {
+      .get(`${API_URL}/api/producto-categorias`, {
         headers: {
           Authorization: `Bearer ${localStorage.token}`,
         },
@@ -43,7 +44,7 @@ export function AdministracionTienda() {
     if (pattern) opts.push(`pattern=${pattern}`);
     const queryString = opts.length > 0 ? `?${opts.join('&')}` : '';
     axios
-      .get(`http://localhost:3000/api/productos${queryString}`, {
+      .get(`${API_URL}/api/productos${queryString}`, {
         headers: {
           Authorization: `Bearer ${localStorage.token}`,
         },

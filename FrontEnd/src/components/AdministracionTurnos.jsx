@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
   Button,
@@ -29,6 +29,8 @@ import dayjs from 'dayjs';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
+const API_URL = 'http://localhost:3000'
+//const API_URL = 'https://95dcnbjt-3000.use2.devtunnels.ms'
 
 export function AdministracionTurnos() {
   const [turnos, setTurnos] = useState([]);
@@ -63,7 +65,7 @@ export function AdministracionTurnos() {
 
   const obtenerTurnos = () => {
     axios
-      .get('http://localhost:3000/api/turnos', {
+      .get(`${API_URL}/api/turnos`, {
         headers: { Authorization: `Bearer ${localStorage.token}` },
       })
       .then((response) => setTurnos(response.data.turnos))
@@ -72,7 +74,7 @@ export function AdministracionTurnos() {
 
   const obtenerUsuarios = () => {
     axios
-      .get('http://localhost:3000/api/usuarios', {
+      .get(`${API_URL}/api/usuarios`, {
         headers: { Authorization: `Bearer ${localStorage.token}` },
       })
       .then((response) => setUsuarios(response.data.usuarios))
@@ -147,11 +149,11 @@ export function AdministracionTurnos() {
     const request =
       modalType === 'edit'
         ? axios.put(
-            `http://localhost:3000/api/turno/${selectedTurno.id}`,
+            `${API_URL}/api/turno/${selectedTurno.id}`,
             body,
             { headers: { Authorization: `Bearer ${localStorage.token}` } }
           )
-        : axios.post('http://localhost:3000/api/turno', body, {
+        : axios.post(`${API_URL}/api/turno`, body, {
             headers: { Authorization: `Bearer ${localStorage.token}` },
           });
 
@@ -172,7 +174,7 @@ export function AdministracionTurnos() {
 
   const handleDelete = (id) => {
     axios
-      .delete(`http://localhost:3000/api/turno/${id}`, {
+      .delete(`${API_URL}/api/turno/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.token}` },
       })
       .then(() => {

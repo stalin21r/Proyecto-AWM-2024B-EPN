@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
   Table,
@@ -22,6 +22,9 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
+const API_URL = 'http://localhost:3000'
+//const API_URL = 'https://95dcnbjt-3000.use2.devtunnels.ms'
+
 export function AdministrarBloquesCasilleros() {
   const [casilleros, setCasilleros] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
@@ -44,7 +47,7 @@ export function AdministrarBloquesCasilleros() {
   }, []);
   const obtenerCasilleros = () => {
     axios
-      .get('http://localhost:3000/api/casilleros-ocupancia', {
+      .get(`${API_URL}/api/casilleros-ocupancia`, {
         headers: {
           Authorization: `Bearer ${localStorage.token}`,
         },
@@ -81,7 +84,7 @@ export function AdministrarBloquesCasilleros() {
   const handleCreateBloque = (modo) => {
     axios
       .post(
-        'http://localhost:3000/api/casillero',
+        `${API_URL}/api/casillero`,
         { modo },
         {
           headers: {
@@ -110,7 +113,7 @@ export function AdministrarBloquesCasilleros() {
   const handleCleanBloque = () => {
     axios
       .put(
-        `http://localhost:3000/api/clean-bloque/${selectedBloque.bloque}`,
+        `${API_URL}/api/clean-bloque/${selectedBloque.bloque}`,
         { registrado_por: loggedUser.id },
         {
           headers: {
@@ -140,7 +143,7 @@ export function AdministrarBloquesCasilleros() {
   const handleDeleteBloque = () => {
     axios
       .delete(
-        `http://localhost:3000/api/casillero-bloque/${selectedBloque.bloque}`,
+        `${API_URL}/api/casillero-bloque/${selectedBloque.bloque}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.token}`,

@@ -287,6 +287,23 @@ button.search-button {
   max-width: 1200px;
 }
 
+@media (max-width: 1000px ) {
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(5, 1fr);    
+  }
+  .product-editor-container {
+    max-height: 630px;
+    justify-content: start;
+  }
+}
+
+@media (max-width: 450px) {
+  .item-search-movil {
+    flex-direction: column;
+  }
+}
+
 .product {
   display: flex;
   flex-direction: column;
@@ -332,9 +349,11 @@ button.search-button {
   font-size: 8rem;
   color: white;
   text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8);
-
 }
 
+.letra-bloque-landing {
+  flex-direction: column;
+}
 .letra-bloque {
   display: flex;
   justify-content: center;
@@ -430,7 +449,31 @@ button.search-button {
   .letra-bloque h1 {
     font-size: 2.5rem;
   }
+}
 
+@media (max-width: 450px) {
+  .casilleros-container {
+    flex-direction: column;
+  }
+  .letra-bloque-landing {
+    flex-direction:row;
+  }
+  .letra-bloque {
+    width: 100%;
+    flex-direction: row;
+  }
+  .bloque-casillero-container {
+    width: 100%;
+  }
+  .bloque-casillero {
+    width: 100%;
+  }
+  .letra-bloque h1 {
+    font-size: 6rem;
+  }
+  .logo {
+    margin: 0;
+  }
 }
 
 .table-horario th {

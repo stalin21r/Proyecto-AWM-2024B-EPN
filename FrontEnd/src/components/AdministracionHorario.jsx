@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -20,6 +20,9 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import SettingsIcon from '@mui/icons-material/Settings';
+const API_URL = 'http://localhost:3000'
+//const API_URL = 'https://95dcnbjt-3000.use2.devtunnels.ms'
+
 // Función para convertir hora en formato de 12 horas a 24 horas
 const convertirHora24 = (hora12) => {
   const [hora, minuto, periodo] = hora12.split(/[:\s]/);
@@ -70,7 +73,7 @@ export function AdministracionHorario() {
   // Efecto para obtener los turnos de la API cuando el componente se monta
   useEffect(() => {
     axios
-      .get('http://localhost:3000/api/turnos', {
+      .get(`${API_URL}/api/turnos`, {
         headers: {
           Authorization: `Bearer ${localStorage.token}`,
         },
@@ -139,7 +142,7 @@ export function AdministracionHorario() {
     }
 
     axios
-      .post('http://localhost:3000/api/asistencia', asistencia, {
+      .post(`${API_URL}/api/asistencia`, asistencia, {
         headers: {
           Authorization: `Bearer ${localStorage.token}`,
         },

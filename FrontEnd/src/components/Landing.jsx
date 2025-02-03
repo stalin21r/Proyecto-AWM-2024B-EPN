@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { NavLink } from 'react-router-dom';
+import { Navigate, NavLink, Route, Routes } from 'react-router-dom';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import EmailIcon from '@mui/icons-material/Email';
@@ -7,7 +7,9 @@ import ContactPhoneIcon from '@mui/icons-material/ContactPhone';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import logo from '../assets/logo.png';
 import { LandingInicio } from './LandingInicio';
+import { LandingCasillero } from './LandingCasillero';
 import '../landing.css';
+import { LandingProducto } from './LandingProducto';
 export function Landing() {
   const [isNavbarFixed, setIsNavbarFixed] = useState(false);
   const coverRef = useRef(null); // Referencia al elemento de la imagen
@@ -50,10 +52,10 @@ export function Landing() {
                 <NavLink to={'/'}>Inicio</NavLink>
               </li>
               <li>
-                <NavLink to={'#'}>Casilleros</NavLink>
+                <NavLink to={'/casilleros'}>Casilleros</NavLink>
               </li>
               <li>
-                <NavLink to={'#'}>Tienda</NavLink>
+                <NavLink to={'/tienda'}>Tienda</NavLink>
               </li>
               <li>
                 <NavLink
@@ -79,17 +81,27 @@ export function Landing() {
       {/* Main */}
       <main className="main">
         {/* Aquí puedes agregar más componentes */}
-        <LandingInicio />
+        <Routes>
+          <Route path="/" element={<Navigate to="/aeie" />} />
+          <Route path="/aeie" element={<LandingInicio />} />
+          <Route path="/casilleros" element={<LandingCasillero />} />
+          <Route path="/tienda" element={<LandingProducto/>} />
+        </Routes>
       </main>
 
       {/* Footer */}
       <footer className="footer">
         <div className="landing-footer-content">
           <div className="landing-footer-rights">
-            <p>&copy; 2025-2026 <strong>AEIE.</strong></p>
-            <p style={{gap: '10px', display: 'flex'}}>
+            <p>
+              &copy; 2025-2026 <strong>AEIE.</strong>
+            </p>
+            <p style={{ gap: '10px', display: 'flex' }}>
               <strong>Designed by</strong>
-              <NavLink to={'https://github.com/stalin21r'} style={{color: '#3f69ff'}}>
+              <NavLink
+                to={'https://github.com/stalin21r'}
+                style={{ color: '#3f69ff' }}
+              >
                 Stalin Garcia
               </NavLink>
             </p>
@@ -119,14 +131,16 @@ export function Landing() {
           <div className="landing-footer-social">
             <h5>Síguenos</h5>
             <section>
-            <NavLink to={'https://www.facebook.com/epn.aeie'} target="_blank">
-              <FacebookIcon sx={{fontSize: '50px'}}/>
-            </NavLink>
-            <NavLink to={'https://www.instagram.com/aeie_epn'} target="_blank">
-              <InstagramIcon sx={{fontSize: '50px'}}/>
-            </NavLink>
+              <NavLink to={'https://www.facebook.com/epn.aeie'} target="_blank">
+                <FacebookIcon sx={{ fontSize: '50px' }} />
+              </NavLink>
+              <NavLink
+                to={'https://www.instagram.com/aeie_epn'}
+                target="_blank"
+              >
+                <InstagramIcon sx={{ fontSize: '50px' }} />
+              </NavLink>
             </section>
-            
           </div>
         </div>
       </footer>

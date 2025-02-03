@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Casillero } from './Casillero';
 import Pagination from '@mui/material/Pagination';
@@ -17,6 +18,8 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import SettingsIcon from '@mui/icons-material/Settings';
+const API_URL = 'http://localhost:3000'
+//const API_URL = 'https://95dcnbjt-3000.use2.devtunnels.ms'
 
 export function AdministracionCasilleros() {
   const navigate = useNavigate();
@@ -44,7 +47,7 @@ export function AdministracionCasilleros() {
   // Obtener las letras de los bloques desde la API
   useEffect(() => {
     axios
-      .get('http://localhost:3000/api/casillero-bloques', {
+      .get(`${API_URL}/api/casillero-bloques`, {
         headers: {
           Authorization: `Bearer ${localStorage.token}`,
         },
@@ -66,7 +69,7 @@ export function AdministracionCasilleros() {
 
   const obtenerCasilleros = () => {
     axios
-      .get(`http://localhost:3000/api/casilleros?letra=${selectedLetra}`, {
+      .get(`${API_URL}/api/casilleros?letra=${selectedLetra}`, {
         headers: {
           Authorization: `Bearer ${localStorage.token}`,
         },
@@ -124,7 +127,7 @@ export function AdministracionCasilleros() {
     };
     axios
       .put(
-        `http://localhost:3000/api/casillero?casillero=${id}`,
+        `${API_URL}/api/casillero?casillero=${id}`,
         propietarioActualizado,
         {
           headers: {
@@ -152,7 +155,7 @@ export function AdministracionCasilleros() {
   const handleDelete = (id) => {
     axios
       .put(
-        `http://localhost:3000/api/casillero/${id}`,
+        `${API_URL}:3000/api/casillero/${id}`,
         { registrado_por: loggedUser.id },
         {
           headers: {

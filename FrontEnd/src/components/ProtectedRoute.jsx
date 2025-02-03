@@ -1,4 +1,4 @@
-import React from "react";
+/* eslint-disable react/prop-types */
 import { Navigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode"; // jwt-decode no tiene exportación por defecto, ajusta si es necesario
 

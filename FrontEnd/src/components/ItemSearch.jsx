@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+/* eslint-disable react/prop-types */
+import { useState } from 'react';
 import {
   TextField,
   InputAdornment,
@@ -14,6 +15,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
+const API_URL = 'http://localhost:3000'
+//const API_URL = 'https://95dcnbjt-3000.use2.devtunnels.ms'
 
 export function ItemSearch({
   categorias,
@@ -59,7 +62,7 @@ export function ItemSearch({
       formData.append('imagen', newProduct.imagen);
     }
     axios
-      .post('http://localhost:3000/api/producto', formData, {
+      .post(`${API_URL}/api/producto`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${localStorage.token}`,

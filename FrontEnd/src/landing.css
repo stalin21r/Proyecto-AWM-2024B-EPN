@@ -68,7 +68,7 @@ body {
   background-color: #102d9e;
   color: white;
   padding: 1rem;
-  transition: top 0.3s ease-in-out;
+  transition: top 0.3s ease-in-out position 0.3s ease-in-out z-index 0.3s ease-in-out;
   border-top: 1px solid #ffffff;
   border-bottom: 1px solid #ffffff;
   height: 70px;
@@ -80,6 +80,7 @@ body {
 
 .landing-navbar.fixed {
   position: fixed;
+  transition: position 0.3s ease-in-out top 0.3s ease-in-out z-index 0.3s ease-in-out;
   top: 0;
   left: 0;
   width: 100%;

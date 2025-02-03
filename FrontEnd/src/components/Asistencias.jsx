@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
   Table,
@@ -13,6 +13,8 @@ import {
   Snackbar,
   Alert,
 } from '@mui/material';
+const API_URL = 'http://localhost:3000'
+//const API_URL = 'https://95dcnbjt-3000.use2.devtunnels.ms'
 
 export function Asistencias() {
   //estados
@@ -32,7 +34,7 @@ export function Asistencias() {
     const user = JSON.parse(atob(localStorage.getItem('token').split('.')[1]));
     console.log(user)
     axios
-      .get(`http://localhost:3000/api/asistencias?usuario=${user.id}`, {
+      .get(`${API_URL}/api/asistencias?usuario=${user.id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },

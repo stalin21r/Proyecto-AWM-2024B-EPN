@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
   Table,
@@ -23,6 +24,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
+const API_URL = 'http://localhost:3000'
+//const API_URL = 'https://95dcnbjt-3000.use2.devtunnels.ms'
 
 export function AdminstracionUsuarios() {
   const [usuarios, setUsuarios] = useState([]);
@@ -47,7 +50,7 @@ export function AdminstracionUsuarios() {
 
   const obtenerUsuarios = () => {
     axios
-      .get('http://localhost:3000/api/usuarios', {
+      .get(`${API_URL}/api/usuarios`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => setUsuarios(response.data.usuarios))
@@ -99,7 +102,7 @@ export function AdminstracionUsuarios() {
   const handleSaveUser = () => {
     if (modalType === 'edit') {
       axios
-        .put(`http://localhost:3000/api/usuario/${selectedUser.id}`, formData, {
+        .put(`${API_URL}/api/usuario/${selectedUser.id}`, formData, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
@@ -121,7 +124,7 @@ export function AdminstracionUsuarios() {
         });
     } else {
       axios
-        .post('http://localhost:3000/api/usuario', formData, {
+        .post(`${API_URL}/api/usuario`, formData, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
@@ -146,7 +149,7 @@ export function AdminstracionUsuarios() {
 
   const handleDeleteUser = (id) => {
     axios
-      .delete(`http://localhost:3000/api/usuario/${id}`, {
+      .delete(`${API_URL}/api/usuario/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
@@ -401,15 +404,3 @@ export function AdminstracionUsuarios() {
     </div>
   );
 }
-
-const modalStyle = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};

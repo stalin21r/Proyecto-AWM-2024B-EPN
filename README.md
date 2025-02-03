@@ -1,5 +1,4 @@
 # Proyecto AWM 2024B
-## Proyecto AWM 2024B EPN
 
 ### Autores
 - Stalin Garcia

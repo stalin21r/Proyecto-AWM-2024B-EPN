@@ -26,7 +26,7 @@ function App() {
         />
 
         {/* Rutas publicas */}
-        <Route path="/aeie" element={<Landing />} />
+        <Route path="/*" element={<Landing />} />
       </Routes>
     </BrowserRouter>
   );

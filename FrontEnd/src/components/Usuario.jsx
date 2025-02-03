@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { TextField, Button, Typography, Box, Grid, Snackbar, Alert} from '@mui/material';
-
+const API_URL = 'http://localhost:3000'
+//const API_URL = 'https://95dcnbjt-3000.use2.devtunnels.ms'
 export function Usuario() {
   const [snackbar, setSnackbar] = useState({
       open: false,
@@ -18,8 +19,6 @@ export function Usuario() {
     confirmarContrasena: '',
   });
 
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
   const handleCloseSnackbar = () => {
     setSnackbar({ open: false, message: '', severity: '' });
   };
@@ -33,7 +32,7 @@ export function Usuario() {
       const loggedUser = JSON.parse(atob(token.split('.')[1]));
 
       axios
-        .get(`http://localhost:3000/api/usuario/${loggedUser.id}`, {
+        .get(`${API_URL}/api/usuario/${loggedUser.id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.token}`,
           },
@@ -78,7 +77,7 @@ export function Usuario() {
 
     axios
       .put(
-        `http://localhost:3000/api/usuario/${loggedUser.id}`,
+        `${API_URL}/api/usuario/${loggedUser.id}`,
         {
           nombre: usuario.nombre,
           apellido: usuario.apellido,

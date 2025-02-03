@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+/* eslint-disable react/prop-types */
+import { useState, useEffect } from 'react';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import noImage from '../assets/noImage.png';
@@ -18,6 +19,8 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
+const API_URL = 'http://localhost:3000'
+//const API_URL = 'https://95dcnbjt-3000.use2.devtunnels.ms'
 
 export function Productos({
   categorias,
@@ -111,7 +114,7 @@ export function Productos({
 
     axios
       .put(
-        `http://localhost:3000/api/producto/${selectedProduct.id}`,
+        `${API_URL}/api/producto/${selectedProduct.id}`,
         formData,
         {
           headers: {
@@ -141,7 +144,7 @@ export function Productos({
 
   const handleDeleteProduct = () => {
     axios
-      .delete(`http://localhost:3000/api/producto/${selectedProduct.id}`, {
+      .delete(`${API_URL}/api/producto/${selectedProduct.id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.token}`,
         },

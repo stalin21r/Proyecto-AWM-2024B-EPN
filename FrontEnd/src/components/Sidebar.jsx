@@ -1,7 +1,7 @@
-import React, { useState, useEffect} from 'react';
+import { useState, useEffect} from 'react';
 import { NavLink } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
-import { Button, Menu, MenuItem, IconButton, Typography } from '@mui/material';
+import { Menu, MenuItem, IconButton, Typography } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MenuIcon from '@mui/icons-material/Menu';
 import lobo from '../assets/lobo.png';
