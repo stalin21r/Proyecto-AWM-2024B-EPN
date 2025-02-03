@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Casillero } from './Casillero';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import { useNavigate } from 'react-router-dom';
 import {
   Modal,
   Box,
@@ -15,8 +16,10 @@ import {
   Alert,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 export function AdministracionCasilleros() {
+  const navigate = useNavigate();
   const [selectedCasillero, setSelectedCasillero] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -29,7 +32,14 @@ export function AdministracionCasilleros() {
   const [selectedLetra, setSelectedLetra] = useState('A');
   const [page, setPage] = useState(1); // Página actual
   const [totalPages, setTotalPages] = useState(1); // Total de páginas
-  const [snackbar, setSnackbar] = useState({ open: false, message: '' });
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: '',
+    severity: '',
+  });
+  const loggedUser = JSON.parse(
+    atob(localStorage.getItem('token').split('.')[1])
+  );
 
   // Obtener las letras de los bloques desde la API
   useEffect(() => {
@@ -99,14 +109,19 @@ export function AdministracionCasilleros() {
 
   const handleSave = (id) => {
     if (!formData.nombre || !formData.correo || !formData.telefono) {
-      alert('todos los campos son necesarios');
+      setSnackbar({
+        open: true,
+        message: 'Todos los campos son necesarios',
+        severity: 'error',
+      });
       return;
     }
     const propietarioActualizado = {
       propietario: formData.nombre,
       correo: formData.correo,
       telefono: formData.telefono,
-    };    
+      registrado_por: loggedUser.id,
+    };
     axios
       .put(
         `http://localhost:3000/api/casillero?casillero=${id}`,
@@ -119,11 +134,15 @@ export function AdministracionCasilleros() {
       )
       .then((response) => {
         obtenerCasilleros();
-        setSnackbar({ open: true, message: response.data.message, severity: 'success' });
+        setSnackbar({
+          open: true,
+          message: response.data.message,
+          severity: 'success',
+        });
       })
       .catch((error) => {
         const errorMsg = error.response?.data.message || error.message;
-        console.error('Error al iniciar sesión:', errorMsg);
+        console.error('Error al registrar casillero:', errorMsg);
         // Mostrar mensaje de error
         setSnackbar({ open: true, message: errorMsg, severity: 'error' });
       });
@@ -133,14 +152,21 @@ export function AdministracionCasilleros() {
   const handleDelete = (id) => {
     axios
       .put(
-        `http://localhost:3000/api/casillero/${id}`, {}, {
+        `http://localhost:3000/api/casillero/${id}`,
+        { registrado_por: loggedUser.id },
+        {
           headers: {
             Authorization: `Bearer ${localStorage.token}`,
           },
-        })
+        }
+      )
       .then((response) => {
         obtenerCasilleros();
-        setSnackbar({ open: true, message: response.data.message, severity: 'success' });
+        setSnackbar({
+          open: true,
+          message: response.data.message,
+          severity: 'success',
+        });
       })
       .catch((error) => {
         const errorMsg = error.response?.data.message || error.message;
@@ -157,178 +183,209 @@ export function AdministracionCasilleros() {
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-        marginTop: '20px',
-      }}
-    >
-      <div className="casilleros-container">
-        <header className="letra-bloque">
-          <h1>{selectedLetra}</h1>
-        </header>
-        <section className="bloque-casillero-container">
-          <div className="bloque-casillero">
-            {casilleros.map((casillero) => (
-              <Casillero
-                key={casillero.id}
-                numero={casillero.numero}
-                isArrended={casillero.ocupado}
-                onClick={() => openModal(casillero)}
-              />
-            ))}
-          </div>
-        </section>
-      </div>
-      <Stack spacing={2} className="paginator">
-        <Pagination
-          count={totalPages}
-          page={page}
-          onChange={handlePageChange}
-          color="primary"
-          sx={{
-            '& .MuiPaginationItem-root': {
-              color: 'white',
-            },
-          }}
-        />
-      </Stack>
-
-      {/* Snackbar para mostrar mensajes */}
-      <Snackbar
-        open={snackbar.open}
-        autoHideDuration={3000}
-        onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+    <div>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-around',
+          alignItems: 'left',
+          gap: 8,
+        }}
       >
-        <Alert
+        <Typography variant="h3" color="#fff" gutterBottom>
+          Casilleros
+        </Typography>
+        {loggedUser.rol && (
+          <IconButton
+            onClick={() =>
+              navigate('/administracion/casilleros/bloques')
+            }
+            sx={{
+              backgroundColor: '#787878',
+              color: '#fff',
+              '&:hover': { backgroundColor: '#5b5b5b' },
+              borderRadius: '50%',
+              width: '50px',
+              height: '50px',
+            }}
+          >
+            <SettingsIcon />
+          </IconButton>
+        )}
+      </Box>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'column',
+          marginTop: '20px',
+        }}
+      >
+        <div className="casilleros-container">
+          <header className="letra-bloque">
+            <h1>{selectedLetra}</h1>
+          </header>
+          <section className="bloque-casillero-container">
+            <div className="bloque-casillero">
+              {casilleros.map((casillero) => (
+                <Casillero
+                  key={casillero.id}
+                  numero={casillero.numero}
+                  isArrended={casillero.ocupado}
+                  onClick={() => openModal(casillero)}
+                />
+              ))}
+            </div>
+          </section>
+        </div>
+        <Stack spacing={2} className="paginator">
+          <Pagination
+            count={totalPages}
+            page={page}
+            onChange={handlePageChange}
+            color="primary"
+            sx={{
+              '& .MuiPaginationItem-root': {
+                color: 'white',
+              },
+            }}
+          />
+        </Stack>
+
+        {/* Snackbar para mostrar mensajes */}
+        <Snackbar
+          open={snackbar.open}
+          autoHideDuration={3000}
           onClose={handleCloseSnackbar}
-          severity={snackbar.severity}
-          variant="filled"
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
         >
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
+          <Alert
+            onClose={handleCloseSnackbar}
+            severity={snackbar.severity}
+            variant="filled"
+          >
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
 
-      {/* Modal */}
-      <Modal
-        open={isModalOpen}
-        onClose={closeModal}
-        aria-labelledby="modal-title"
-        aria-describedby="modal-description"
-      >
-        <Box
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: 400,
-            bgcolor: 'background.paper',
-            boxShadow: 24,
-            p: 3,
-            borderRadius: 2,
-          }}
+        {/* Modal */}
+        <Modal
+          open={isModalOpen}
+          onClose={closeModal}
+          aria-labelledby="modal-title"
+          aria-describedby="modal-description"
         >
           <Box
             sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: 400,
+              bgcolor: 'background.paper',
+              boxShadow: 24,
+              p: 3,
+              borderRadius: 2,
             }}
           >
-            <Typography
-              id="modal-title"
-              variant="h6"
-              color={selectedCasillero?.ocupado ? 'primary' : 'success'}
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
             >
-              {selectedCasillero?.ocupado
-                ? 'Información del Casillero'
-                : 'Casillero Disponible'}
-            </Typography>
-            <IconButton onClick={closeModal}>
-              <CloseIcon />
-            </IconButton>
-          </Box>
+              <Typography
+                id="modal-title"
+                variant="h6"
+                color={selectedCasillero?.ocupado ? 'primary' : 'success'}
+              >
+                {selectedCasillero?.ocupado
+                  ? 'Información del Casillero'
+                  : 'Casillero Disponible'}
+              </Typography>
+              <IconButton onClick={closeModal}>
+                <CloseIcon />
+              </IconButton>
+            </Box>
 
-          <Divider sx={{ my: 2 }} />
+            <Divider sx={{ my: 2 }} />
 
-          <Box
-            id="modal-description"
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 2,
-            }}
-          >
-            <TextField
-              label="Número"
-              value={selectedCasillero?.numero}
-              disabled
-            />
-            <TextField
-              label="Nombre"
-              name="nombre"
-              value={formData.nombre}
-              onChange={handleInputChange}
-              required
-              error={!formData.nombre}
-              helperText={
-                !formData.nombre ? 'Este campos es obligatorio!!' : ''
-              }
-            />
-            <TextField
-              label="Correo"
-              name="correo"
-              value={formData.correo}
-              onChange={handleInputChange}
-              required
-              error={!formData.correo}
-              helperText={
-                !formData.correo ? 'Este campos es obligatorio!!' : ''
-              }
-            />
-            <TextField
-              label="Teléfono"
-              name="telefono"
-              value={formData.telefono}
-              onChange={handleInputChange}
-              required
-              error={!formData.telefono}
-              helperText={
-                !formData.telefono ? 'Este campos es obligatorio!!' : ''
-              }
-            />
-          </Box>
+            <Box
+              id="modal-description"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 2,
+              }}
+            >
+              <TextField
+                label="Número"
+                value={selectedCasillero?.numero}
+                disabled
+              />
+              <TextField
+                label="Nombre"
+                name="nombre"
+                value={formData.nombre}
+                onChange={handleInputChange}
+                required
+                error={!formData.nombre}
+                helperText={
+                  !formData.nombre ? 'Este campos es obligatorio!!' : ''
+                }
+              />
+              <TextField
+                label="Correo"
+                name="correo"
+                value={formData.correo}
+                onChange={handleInputChange}
+                required
+                error={!formData.correo}
+                helperText={
+                  !formData.correo ? 'Este campos es obligatorio!!' : ''
+                }
+              />
+              <TextField
+                label="Teléfono"
+                name="telefono"
+                value={formData.telefono}
+                onChange={handleInputChange}
+                required
+                error={!formData.telefono}
+                helperText={
+                  !formData.telefono ? 'Este campos es obligatorio!!' : ''
+                }
+              />
+            </Box>
 
-          <Divider sx={{ my: 3 }} />
+            <Divider sx={{ my: 3 }} />
 
-          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            {selectedCasillero?.ocupado && (
+            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+              {selectedCasillero?.ocupado && (
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={() => handleDelete(selectedCasillero.id)}
+                >
+                  Eliminar
+                </Button>
+              )}
               <Button
                 variant="contained"
-                color="error"
-                onClick={() => handleDelete(selectedCasillero.id)}
+                color="primary"
+                onClick={() => handleSave(selectedCasillero.id)}
               >
-                Eliminar
+                {selectedCasillero?.ocupado ? 'Actualizar' : 'Guardar'}
               </Button>
-            )}
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => handleSave(selectedCasillero.id)}
-            >
-              {selectedCasillero?.ocupado ? 'Actualizar' : 'Guardar'}
-            </Button>
-            <Button variant="outlined" color="secondary" onClick={closeModal}>
-              Cancelar
-            </Button>
+              <Button variant="outlined" color="secondary" onClick={closeModal}>
+                Cancelar
+              </Button>
+            </Box>
           </Box>
-        </Box>
-      </Modal>
+        </Modal>
+      </div>
     </div>
   );
 }

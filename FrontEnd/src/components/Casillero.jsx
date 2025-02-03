@@ -1,4 +1,4 @@
-import React from 'react';
+/* eslint-disable react/prop-types */
 import casillero from '../assets/locker.png';
 
 export function Casillero({ numero, isArrended, onClick }) {

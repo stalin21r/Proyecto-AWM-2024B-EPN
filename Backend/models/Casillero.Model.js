@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db.config');
 const CasilleroBloque = require('./CasilleroBloque.Model');
-
+const Usuario = require('./Usuario.Model');
 const Casillero = sequelize.define(
   'Casillero',
   {
@@ -40,6 +40,15 @@ const Casillero = sequelize.define(
         is: /^[0-9\-+()\s]*$/,
       },
     },
+    registrado_por: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: Usuario,
+        key: 'id'
+      },
+      allowNull: true,
+      
+    }
   },
   {
     tableName: 'casilleros',
@@ -47,11 +56,13 @@ const Casillero = sequelize.define(
     timestamps: false,
   }
 );
-
 // Define the association
 Casillero.belongsTo(CasilleroBloque, {
   foreignKey: 'bloque',
   targetKey: 'id',
 });
-
+Casillero.belongsTo(Usuario, {
+  foreignKey: 'registrado_por',
+  targetKey: 'id',
+});
 module.exports = Casillero;

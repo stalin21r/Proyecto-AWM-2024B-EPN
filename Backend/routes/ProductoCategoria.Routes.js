@@ -1,6 +1,5 @@
 const ProductoCtegoriaController = require('../controllers/ProductoCategoria.Controller');
 const VerificarToken = require('../middlewares/Auth.Middleware');
-
 module.exports = (app) => {
   app.post('/api/producto-categoria', VerificarToken, ProductoCtegoriaController.createProductoCategoria);
   app.get('/api/producto-categorias', VerificarToken, ProductoCtegoriaController.getProductosCategorias);

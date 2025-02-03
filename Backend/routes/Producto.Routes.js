@@ -3,7 +3,6 @@ const VerificarToken = require('../middlewares/Auth.Middleware');
 const multer = require('multer');
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
-
 module.exports = (app) => {
   app.post('/api/producto', VerificarToken, upload.single('imagen'), ProductoController.createProducto);
   app.get('/api/productos', VerificarToken, ProductoController.getAllProductos);

@@ -1,24 +1,26 @@
 const { Sequelize } = require('sequelize');
 require('dotenv').config();
 const fs = require('fs');
-
+const sequelizeConfig = {
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  dialect: 'postgres',
+  logging: false,
+};
+if (process.env.DB_SSL === 'true') {
+  sequelizeConfig.dialectOptions = {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
+  };
+}
 const sequelize = new Sequelize(
   process.env.DB_NAME,
   process.env.DB_USER,
   process.env.DB_PASS,
-  {
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    dialect: 'postgres',
-    dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false
-      }
-    },
-  }
+  sequelizeConfig
 );
-
 sequelize
   .authenticate()
   .then(() => {
@@ -27,5 +29,4 @@ sequelize
   .catch((err) => {
     console.error('Error al conectar con la db:', err);
   });
-
-  module.exports = sequelize;
+module.exports = sequelize;

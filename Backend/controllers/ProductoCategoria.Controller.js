@@ -1,5 +1,4 @@
 const ProductoCategoria = require('../models/ProductoCategoria.Model');
-
 // Crear ProductoCategoria
 exports.createProductoCategoria = async (req, res) => {
   try {
@@ -13,7 +12,6 @@ exports.createProductoCategoria = async (req, res) => {
       .json({ message: 'Error al crear Categoria.', error: error.message });
   }
 };
-
 // Obtener todas las categorias
 exports.getProductosCategorias = async (req, res) => {
   try {
@@ -38,7 +36,6 @@ exports.getProductosCategorias = async (req, res) => {
       .json({ message: 'Error al obtener categorias.', error: error.message });
   }
 };
-
 // Obtener Categoria por ID
 exports.getProductoCategoriaById = async (req, res) => {
   const { id } = req.params;
@@ -64,7 +61,6 @@ exports.getProductoCategoriaById = async (req, res) => {
       });
   }
 };
-
 // Actualizar Categoria
 exports.updateProductoCategoria = async (req, res) => {
   const { id } = req.params;
@@ -89,7 +85,6 @@ exports.updateProductoCategoria = async (req, res) => {
       });
   }
 };
-
 // Eliminar Categoria
 exports.deleteProductoCategoria = async (req, res) => {
   const { id } = req.params;

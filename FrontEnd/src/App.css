@@ -11,6 +11,11 @@
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
+  transform: translateX(0);
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out, visibility 0.3s ease-in-out, width 0.1s ease-in-out;
+  opacity: 1;
+  visibility: visible;
+  overflow-y: auto;
 }
 
 .sidebar h2 {
@@ -27,6 +32,49 @@
   margin-top: 30px;
   margin-bottom: 20px;
   flex: 3;
+}
+
+.sidebar-toggle {
+  display: none;
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  background: #fde269;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 1200;
+  /* Asegura que está sobre el sidebar */
+}
+
+/* Estilos cuando la pantalla es menor a 900px */
+@media (max-width: 900px) {
+
+  .sidebar {
+    transform: translateX(-100%);
+    opacity: 0;
+    visibility: hidden;
+    width: 0;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out, visibility 0.3s ease-in-out, width 0.8s ease-in-out;
+  }
+
+  /* Estado abierto del sidebar */
+  .sidebar.open {
+    transform: translateX(0);
+    opacity: 1;
+    visibility: visible;
+    width: 100%;
+  }
+
+
+  /* Botón de alternar sidebar */
+  .sidebar-toggle {
+    display: block;
+  }
+}
+
+.user-menu-container {
+  width: 95%;
 }
 
 .lobo-aeie {
@@ -77,7 +125,8 @@
   display: flex;
   height: 100vh;
   width: 100vw;
-  overflow: hidden; /* Evitar overflow en el contenedor principal */
+  overflow: hidden;
+  /* Evitar overflow en el contenedor principal */
 }
 
 .content {
@@ -87,8 +136,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; /* Asegura que el contenido se alinee desde el principio */
-  overflow-y: auto; /* Agregar desplazamiento vertical solo si es necesario */
+  justify-content: flex-start;
+  /* Asegura que el contenido se alinee desde el principio */
+  overflow-y: auto;
+  /* Agregar desplazamiento vertical solo si es necesario */
 }
 
 .content::-webkit-scrollbar {
@@ -122,18 +173,21 @@
 
 .logo {
   width: 150px;
-  margin-top: 20px; /* Dejar un margen en la parte superior */
+  margin-top: 20px;
+  /* Dejar un margen en la parte superior */
 }
 
 @media (max-width: 1024px) {
   .logo {
-    width: 120px; /* Ajustar tamaño del logo en pantallas más pequeñas */
+    width: 120px;
+    /* Ajustar tamaño del logo en pantallas más pequeñas */
   }
 }
 
 @media (max-width: 768px) {
   .logo {
-    width: 100px; /* Ajustar aún más en pantallas más pequeñas */
+    width: 100px;
+    /* Ajustar aún más en pantallas más pequeñas */
   }
 }
 
@@ -167,7 +221,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content:space-between;
+  justify-content: space-between;
   color: #fff;
   margin-bottom: 10px;
 }
@@ -221,7 +275,7 @@ button.search-button {
   padding: 20px;
   margin: 20px;
   max-width: 100%;
-  
+
 }
 
 .products-grid {
@@ -271,12 +325,14 @@ button.search-button {
   display: flex;
   width: 80%;
   height: 70%;
-  align-items: flex-start; /* Alinea la letra y casilleros al inicio */
-  gap: 1rem; /* Espacio entre la letra y los casilleros */
+  align-items: flex-start;
+  /* Alinea la letra y casilleros al inicio */
+  gap: 1rem;
+  /* Espacio entre la letra y los casilleros */
   font-size: 8rem;
   color: white;
   text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8);
-  
+
 }
 
 .letra-bloque {
@@ -292,7 +348,7 @@ button.search-button {
   transition: font-size 0.3s ease;
 }
 
-.bloque-casillero-container{
+.bloque-casillero-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -302,11 +358,11 @@ button.search-button {
 
 .bloque-casillero {
   display: grid;
-  grid-template-columns: repeat(5, 1fr); 
+  grid-template-columns: repeat(5, 1fr);
   grid-template-rows: repeat(4, 1fr);
   gap: 0;
   width: 60%;
-  
+
 }
 
 .casillero {
@@ -318,7 +374,8 @@ button.search-button {
   background-color: transparent;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  width: 100%; /* Ocupa toda la celda */
+  width: 100%;
+  /* Ocupa toda la celda */
 }
 
 .casillero img {
@@ -338,39 +395,80 @@ button.search-button {
 
 .casillero span {
   position: absolute;
-  top: 75%; /* Centrado verticalmente */
-  left: 65%; /* Centrado horizontalmente */
+  top: 75%;
+  /* Centrado verticalmente */
+  left: 65%;
+  /* Centrado horizontalmente */
   transform: translate(-50%, -50%);
   color: white;
-  font-size: 1.2rem; /* Tamaño del número */
+  font-size: 1.2rem;
+  /* Tamaño del número */
   font-weight: bold;
-  text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8); /* Sombra para mejor contraste */
-  pointer-events: none; /* No interfiere con clics */
+  text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8);
+  /* Sombra para mejor contraste */
+  pointer-events: none;
+  /* No interfiere con clics */
 }
 
 @media (max-width: 1024px) {
-  
+
   .letra-bloque h1 {
     font-size: 6rem;
   }
 }
 
 @media (max-width: 768px) {
- 
+
   .letra-bloque h1 {
     font-size: 4rem;
   }
- 
+
 }
 
 @media (max-width: 480px) {
-  
+
   .letra-bloque h1 {
     font-size: 2.5rem;
   }
-  
+
 }
 
-.table-horario th{
+.table-horario th {
   text-align: center;
+}
+
+.form-container {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  padding: 20px;
+}
+
+label {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.input-field {
+  width: 90%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #3f51b5;
+}
+
+.input-field[type="time"]::-webkit-outer-spin-button,
+.input-field[type="time"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+  color: #000;
 }

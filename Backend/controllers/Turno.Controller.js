@@ -1,6 +1,5 @@
 const sequelize = require('../config/db.config');
 const Turno = require('../models/Turno.Model');
-
 //  Crear Turno
 exports.createTurno = async (req, res) => {
   try {
@@ -12,15 +11,13 @@ exports.createTurno = async (req, res) => {
       .json({ message: 'Error al crear el turno.', error: error.message });
   }
 };
-
 // Obtener todos los turnos
 exports.getTurnos = async (req, res) => {
   try {
     const turnos = await sequelize.query(
       'SELECT * FROM public.vista_turnos', 
       { type: sequelize.QueryTypes.SELECT }
-    );
-    
+    );    
     if (turnos.length === 0) {
       return res
         .status(404)
@@ -35,7 +32,6 @@ exports.getTurnos = async (req, res) => {
       .json({ message: 'Error al obtener turnos.', error: error.message });
   }
 };
-
 // Obtener Turno por ID
 exports.getTurnoById = async (req, res) => {
   const { id } = req.params;
@@ -54,29 +50,33 @@ exports.getTurnoById = async (req, res) => {
       .json({ message: 'Error al obtener el turno.', error: error.message });
   }
 };
-
 // Actualizar Turno
 exports.updateTurno = async (req, res) => {
   const { id } = req.params;
-  const { usuario, dia, hora_llegada, hora_salida } = req.body;
+  const { usuario, dia, hora_inicio, hora_fin } = req.body;
   try {
-    const turno = await Turno.update(
-      { usuario, dia, hora_llegada, hora_salida }, 
-      { where: { id }}
+    // Actualizar el turno
+    const [rowsUpdated] = await Turno.update(
+      { usuario, dia, hora_inicio, hora_fin },
+      { where: { id } }
     );
-    if (!turno) {
-      return res.status(404).json({ message: 'Turno no encontrado.', error: '404 Not Found' });
+    // Verificar si se actualizó alguna fila
+    if (rowsUpdated === 0) {
+      return res.status(404).json({
+        message: 'Turno no encontrado.',
+        error: '404 Not Found',
+      });
     }
-    res
-      .status(200)
-      .json({ message: 'Turno actualizado correctamente.', turno });
+    res.status(200).json({
+      message: 'Turno actualizado correctamente.'
+    });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: 'Error al actualizar el turno.', error: error.message });
+    res.status(500).json({
+      message: 'Error al actualizar el turno.',
+      error: error.message,
+    });
   }
 };
-
 // Eliminar Turno
 exports.deleteTurno = async (req, res) => {
   const { id } = req.params;

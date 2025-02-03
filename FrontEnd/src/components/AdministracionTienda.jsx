@@ -2,12 +2,18 @@ import axios from 'axios';
 import { ItemSearch } from './ItemSearch';
 import { Productos } from './Productos';
 import React, { useEffect, useState } from 'react';
+import {
+  Snackbar,
+  Alert,
+} from '@mui/material';
 
 export function AdministracionTienda() {
   const [productos, setProductos] = useState([]);
   const [categoria, setCategoria] = useState(null);
   const [pattern, setPattern] = useState(null);
   const [categorias, setCategorias] = useState([]);
+  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });  
+
 
   // Cargar categorías al montar el componente
   useEffect(() => {
@@ -22,7 +28,7 @@ export function AdministracionTienda() {
       })
       .catch((error) => {
         console.error('Error al obtener categorías:', error);
-        alert('No se pudo cargar las categorías. Intente más tarde.');
+        setSnackbar({ open: true, message: 'No se pudo cargar las categorías. Intente más tarde.', severity: 'error' });
       });
   }, []); // Ejecuta solo al montar
 
@@ -46,9 +52,14 @@ export function AdministracionTienda() {
         setProductos(response.data.productos);
       })
       .catch((error) => {
-        console.error('Error al obtener productos:', error);
-        alert('No se pudo cargar los productos. Intente más tarde.');
+        console.error('Error al obtener los productos:', error);
+        setProductos([]);
+        setSnackbar({ open: true, message: 'No existen productos.', severity: 'error' });
       });
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar({ open: false, message: '', severity: '' });
   };
 
   return (
@@ -58,13 +69,30 @@ export function AdministracionTienda() {
         setCategoria={setCategoria}
         setPattern={setPattern}
         onActualizarProductos={cargarProductos}
+        setSnackbar={setSnackbar}
       />
       <Productos
         categorias={categorias}
         productos={productos}
         totalPages={Math.ceil(productos.length / 10)}
         onActualizarProductos={cargarProductos}
+        setSnackbar={setSnackbar}
       />
+      {/* Snackbar para mostrar mensajes */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbar.severity}
+          variant="filled"
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </>
   );
 }

@@ -4,12 +4,10 @@ const sequelize = require('../config/db.config');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = process.env.JWT_SECRET;
-
 if(!JWT_SECRET) {
   console.error('JWT_SECRET no está definido en el archivo .env');
   process.exit(1);
 }
-
 exports.login = async (req, res) => {
   const { usuario, contrasena } = req.body;
   if (!usuario || !contrasena) {

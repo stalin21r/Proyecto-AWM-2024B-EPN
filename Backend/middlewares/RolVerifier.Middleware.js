@@ -1,4 +1,3 @@
-
 const VerificarRol = (req, res, next) => {
   if(req.user && req.user.rol === true){
     next()
@@ -6,5 +5,4 @@ const VerificarRol = (req, res, next) => {
     res.status(403).json({ message: 'Acceso denegado' })
   }
 }
-
 module.exports = VerificarRol

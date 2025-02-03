@@ -1,6 +1,5 @@
 const TurnoController = require('../controllers/Turno.Controller');
 const VerificarToken = require('../middlewares/Auth.Middleware');
-
 module.exports = (app) => {
   app.post('/api/turno', VerificarToken, TurnoController.createTurno);
   app.get('/api/turnos', VerificarToken, TurnoController.getTurnos);

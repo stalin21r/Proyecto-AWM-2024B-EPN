@@ -11,11 +11,21 @@ import {
   Typography,
   Divider,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
 
-export function Productos({ categorias, productos, totalPages, onActualizarProductos }) {
+export function Productos({
+  categorias,
+  productos,
+  totalPages,
+  onActualizarProductos,
+  setSnackbar,
+}) {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [page, setPage] = useState(1);
@@ -26,6 +36,13 @@ export function Productos({ categorias, productos, totalPages, onActualizarProdu
     imagen: null,
     imagenActual: '', // Nueva propiedad para la imagen actual
   });
+
+  // Estado para controlar la visibilidad del Dialog de confirmación
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+  const productosPorPagina = 10;
+  const inicio = (page - 1) * productosPorPagina;
+  const fin = inicio + productosPorPagina;
+  const productosPaginados = productos.slice(inicio, fin);
 
   useEffect(() => {
     if (selectedProduct) {
@@ -71,61 +88,92 @@ export function Productos({ categorias, productos, totalPages, onActualizarProdu
   };
 
   const handleSaveUpdatedProduct = () => {
-    if (!updatedProduct.nombre || !updatedProduct.precio || !updatedProduct.categoria) {
-      alert("Todos los campos son obligatorios.");
+    if (
+      !updatedProduct.nombre ||
+      !updatedProduct.precio ||
+      !updatedProduct.categoria
+    ) {
+      setSnackbar({
+        open: true,
+        message: 'Todos los campos son obligatorios.',
+        severity: 'error',
+      });
       return;
     }
 
     const formData = new FormData();
-    formData.append("nombre", updatedProduct.nombre);
-    formData.append("precio", updatedProduct.precio);
-    formData.append("categoria", updatedProduct.categoria);
+    formData.append('nombre', updatedProduct.nombre);
+    formData.append('precio', updatedProduct.precio);
+    formData.append('categoria', updatedProduct.categoria);
     if (updatedProduct.imagen) {
-      formData.append("imagen", updatedProduct.imagen);
+      formData.append('imagen', updatedProduct.imagen);
     }
 
     axios
-      .put(`http://localhost:3000/api/producto/${selectedProduct.id}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${localStorage.token}`,
-        },
-      })
-      .then(() => {
-        alert("Producto actualizado correctamente.");
+      .put(
+        `http://localhost:3000/api/producto/${selectedProduct.id}`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${localStorage.token}`,
+          },
+        }
+      )
+      .then((res) => {
+        setSnackbar({
+          open: true,
+          message: res.data.message,
+          severity: 'success',
+        });
         onActualizarProductos();
         closeModal();
       })
       .catch((error) => {
-        console.error("Error al actualizar el producto:", error);
-        alert("No se pudo actualizar el producto. Intente más tarde.");
+        console.error('Error al actualizar el producto:', error);
+        setSnackbar({
+          open: true,
+          message: error.data.message,
+          severity: 'error',
+        });
       });
   };
 
   const handleDeleteProduct = () => {
-    if (window.confirm("¿Estás seguro de que deseas eliminar este producto?")) {
-      axios
-        .delete(`http://localhost:3000/api/producto/${selectedProduct.id}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.token}`,
-          },
-        })
-        .then(() => {
-          alert("Producto eliminado correctamente.");
-          onActualizarProductos();
-          closeModal();
-        })
-        .catch((error) => {
-          console.error("Error al eliminar el producto:", error);
-          alert("No se pudo eliminar el producto. Intente más tarde.");
+    axios
+      .delete(`http://localhost:3000/api/producto/${selectedProduct.id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.token}`,
+        },
+      })
+      .then((res) => {
+        setSnackbar({
+          open: true,
+          message: res.data.message,
+          severity: 'success',
         });
-    }
+        onActualizarProductos();
+        closeModal();
+        setOpenConfirmDialog(false); // Cerrar el diálogo de confirmación
+      })
+      .catch((error) => {
+        console.error('Error al eliminar el producto:', error);
+        setSnackbar({
+          open: true,
+          message: error.data.message,
+          severity: 'error',
+        });
+      });
+  };
+
+  const handleCancelDelete = () => {
+    setOpenConfirmDialog(false); // Cerrar el diálogo de confirmación si el usuario cancela
   };
 
   return (
     <div className="product-editor-container">
       <div className="products-grid">
-        {productos.map((producto) => (
+        {productosPaginados.map((producto) => (
           <button
             key={producto.id}
             className="product"
@@ -134,7 +182,10 @@ export function Productos({ categorias, productos, totalPages, onActualizarProdu
             data-imagen={producto.imagen}
             onClick={() => openModal(producto)}
           >
-            <img src={producto.imagen ? producto.imagen : noImage} alt={producto.nombre} />
+            <img
+              src={producto.imagen ? producto.imagen : noImage}
+              alt={producto.nombre}
+            />
             <h3>{producto.nombre}</h3>
             <p>Costo: ${producto.precio}</p>
           </button>
@@ -155,7 +206,7 @@ export function Productos({ categorias, productos, totalPages, onActualizarProdu
         />
       </Stack>
 
-      {/* Modal */}
+      {/* Modal para editar producto */}
       <Modal
         open={isModalOpen}
         onClose={closeModal}
@@ -238,11 +289,7 @@ export function Productos({ categorias, productos, totalPages, onActualizarProdu
               sx={{ justifyContent: 'flex-start' }}
             >
               Seleccionar archivo
-              <input
-                type="file"
-                hidden
-                onChange={handleImageChange}
-              />
+              <input type="file" hidden onChange={handleImageChange} />
             </Button>
             <Typography
               variant="body2"
@@ -251,7 +298,9 @@ export function Productos({ categorias, productos, totalPages, onActualizarProdu
                 color: 'gray',
               }}
             >
-              {updatedProduct.imagen ? updatedProduct.imagen.name : 'Sin archivo seleccionado'}
+              {updatedProduct.imagen
+                ? updatedProduct.imagen.name
+                : 'Sin archivo seleccionado'}
             </Typography>
 
             {/* Mostrar la imagen actual del producto */}
@@ -262,7 +311,7 @@ export function Productos({ categorias, productos, totalPages, onActualizarProdu
                 alt="Imagen Actual"
                 sx={{
                   maxWidth: '150px',
-                  alignSelf: 'center',                  
+                  alignSelf: 'center',
                 }}
               />
             )}
@@ -275,7 +324,7 @@ export function Productos({ categorias, productos, totalPages, onActualizarProdu
                 alt="Vista previa"
                 sx={{
                   maxWidth: '150px',
-                  alignSelf: 'center',                  
+                  alignSelf: 'center',
                 }}
               />
             )}
@@ -290,18 +339,40 @@ export function Productos({ categorias, productos, totalPages, onActualizarProdu
             <Button
               variant="contained"
               color="error"
-              onClick={handleDeleteProduct}
+              onClick={() => setOpenConfirmDialog(true)} // Abre el dialog de confirmación
               sx={{ marginLeft: 2 }}
             >
               Eliminar
             </Button>
-            <Button variant="contained" color="primary" onClick={handleSaveUpdatedProduct}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleSaveUpdatedProduct}
+            >
               Guardar
             </Button>
-            
           </Box>
         </Box>
       </Modal>
+
+      {/* Dialog de confirmación de eliminación */}
+      <Dialog
+        open={openConfirmDialog}
+        onClose={handleCancelDelete}
+      >
+        <DialogTitle>Confirmación</DialogTitle>
+        <DialogContent>
+          <Typography>¿Estás seguro de que deseas eliminar este producto?</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancelDelete} color="primary">
+            Cancelar
+          </Button>
+          <Button onClick={handleDeleteProduct} color="secondary">
+            Eliminar
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

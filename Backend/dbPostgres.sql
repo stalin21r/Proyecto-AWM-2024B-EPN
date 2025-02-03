@@ -4,6 +4,8 @@ CREATE DATABASE aeie_gestor;
 
 CREATE SCHEMA private;
 
+---TABLAS
+
 -- Tabla de usuarios
 CREATE TABLE private.usuarios (
     id SERIAL PRIMARY KEY,
@@ -18,7 +20,7 @@ CREATE TABLE private.usuarios (
 -- Tabla de turnos
 CREATE TABLE private.turnos (
     id SERIAL PRIMARY KEY,
-    usuario INTEGER REFERENCES private.usuarios (id) ON DELETE CASCADE,
+    usuario INTEGER REFERENCES private.usuarios(id) ON DELETE CASCADE,
     dia INTEGER CHECK (dia BETWEEN 1 AND 5),
     hora_inicio TIME NOT NULL,
     hora_fin TIME NOT NULL
@@ -27,7 +29,7 @@ CREATE TABLE private.turnos (
 -- Tabla de asistencia
 CREATE TABLE private.asistencia (
     id SERIAL PRIMARY KEY,
-    usuario INTEGER REFERENCES private.usuarios (id) ON DELETE CASCADE,
+    usuario INTEGER REFERENCES private.usuarios(id) ON DELETE CASCADE,
     dia DATE NOT NULL,
     hora_llegada TIME,
     hora_salida TIME
@@ -44,7 +46,7 @@ CREATE TABLE private.productos (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL,
     precio DECIMAL(10, 2) NOT NULL,
-    categoria INTEGER REFERENCES private.productos_categorias (id) ON DELETE CASCADE,
+    categoria INTEGER REFERENCES private.productos_categorias(id) ON DELETE CASCADE,
     imagen bytea
 );
 
@@ -57,16 +59,36 @@ CREATE TABLE private.bloque (
 -- Tabla de casilleros
 CREATE TABLE private.casilleros (
     id SERIAL PRIMARY KEY,
-    bloque INTEGER REFERENCES private.bloque (id) ON DELETE CASCADE,
+    bloque INTEGER REFERENCES private.bloque(id) ON DELETE CASCADE,
     numero INTEGER NOT NULL,
     ocupado BOOLEAN DEFAULT FALSE,
     propietario VARCHAR(50),
-    correo VARCHAR(50),
-    telefono VARCHAR(20)
+    correo VARCHAR(100),
+    telefono VARCHAR(10),
+    registrado_por INTEGER REFERENCES private.usuarios(id) ON DELETE CASCADE
 );
+
+INSERT INTO private.productos_categorias (categoria)
+VALUES
+    ('Snacks'),
+    ('Bebidas'),
+    ('Comida'),
+    ('Alquileres'),
+    ('Electrónica');
+
 
 -- DROP FUNCTION private.crear_bloque_y_casilleros(bool);
 
+---INSTALACION DE PLPERL EN LA BD
+--SELECT * FROM pg_available_extensions WHERE name = 'plperl';
+--CREATE EXTENSION plperl; --comando para instalar
+--SELECT lanname FROM pg_language;
+
+
+
+---FUNCIONES
+
+--Funcion para crear bloques de casilleros
 CREATE OR REPLACE FUNCTION private.crear_bloque_y_casilleros(de_derecha_a_izquierda boolean)
  RETURNS integer
  LANGUAGE plperl
@@ -111,12 +133,45 @@ AS $function$
 $function$
 ;
 
-select * from private.usuarios u;
+--Funcion para loggear usuario
+CREATE OR REPLACE FUNCTION private.login_usuario(
+    usuario_input text
+)
+RETURNS TABLE(
+    id INT, 
+    contrasena VARCHAR, 
+    nombre VARCHAR, 
+    apellido VARCHAR, 
+    rol BOOLEAN
+) 
+language plperl
+security definer
+AS $$
+	use strict;
+	use warnings;
+    my $usuario_input = $_[0];
+    my $query = "
+        SELECT id, contrasena, nombre, apellido, rol
+        FROM private.usuarios
+        WHERE correo = '$usuario_input' OR usuario = '$usuario_input';
+    ";
+	
+	my $sth = spi_query($query);
+	
+	while (defined (my $row = spi_fetchrow ($sth))) {
+		return_next ($row);
+	}	
+	
+	return;
+    
+$$;
 
-TRUNCATE TABLE private.usuarios RESTART IDENTITY CASCADE;
 
+---VISTAS
+
+--Vista Turnos
 CREATE VIEW public.vista_turnos AS
-SELECT
+SELECT 
     t.id,
     u.nombre,
     u.apellido,
@@ -130,11 +185,20 @@ SELECT
     t.hora_inicio,
     t.hora_fin
 FROM private.turnos t
-    INNER JOIN private.usuarios u ON t.usuario = u.id;
+INNER JOIN private.usuarios u ON t.usuario = u.id;
+
 
 create view public.vista_asistencias as
-select a.id, a.usuario, u.nombre, u.apellido, a.dia, a.hora_llegada, a.hora_salida
-from private.asistencia a
-    inner join private.usuarios u on a.usuario = u.id;
+select 
+	a.id, 
+	a.usuario, 
+	u.nombre, 
+	u.apellido, 
+	a.dia, 
+	a.hora_llegada, 
+	a.hora_salida  
+from private.asistencia a 
+inner join private.usuarios u on a.usuario = u.id;
 
-select * from public.vista_asistencias;
+
+-------------------

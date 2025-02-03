@@ -1,12 +1,17 @@
 {
-  "name": "proyecto",
+  "name": "proyecto-webs-2024b",
   "version": "1.0.0",
-  "main": "index.js",
+  "private": true,
+  "workspaces": [
+    "Frontend",
+    "Backend"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "npm run dev --workspace=Backend & npm run dev --workspace=Frontend"
   },
   "keywords": [],
-  "author": "",
+  "author": "Stalin Garcia",
   "license": "ISC",
-  "description": ""
+  "description": "Proyecto aplicaciones web y moviles 2024b (backend y frontend)"
 }

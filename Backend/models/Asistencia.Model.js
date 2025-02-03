@@ -1,7 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db.config');
 const Usuario = require('./Usuario.Model');
-
 const Asistencia = sequelize.define(
   'Asistencia',
   {
@@ -36,5 +35,4 @@ const Asistencia = sequelize.define(
     timestamps: false
   }
 );
-
 module.exports = Asistencia;  

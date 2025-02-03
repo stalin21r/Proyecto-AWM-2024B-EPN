@@ -1,6 +1,5 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db.config');
-
 const ProductoCategoria = sequelize.define(
   'ProductoCategoria',
   {
@@ -16,5 +15,4 @@ const ProductoCategoria = sequelize.define(
     timestamps: false
   }
 );
-
 module.exports = ProductoCategoria;
