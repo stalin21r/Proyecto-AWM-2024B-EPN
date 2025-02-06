@@ -1,0 +1,11 @@
+#Puerto del servidor backend (por lo general 3000)
+SERVER_PORT=
+#Parametros Postgresql
+DB_HOST=
+DB_NAME=
+DB_USER=
+DB_PASS=
+DB_PORT=
+DB_SSL=
+#Clave secreta para validar JWT
+JWT_SECRET=

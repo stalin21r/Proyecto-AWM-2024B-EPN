@@ -1,0 +1,517 @@
+.App {
+  text-align: center;
+}
+
+.sidebar {
+  background-color: #ffffff;
+  width: 15%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  transform: translateX(0);
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out, visibility 0.3s ease-in-out, width 0.1s ease-in-out;
+  opacity: 1;
+  visibility: visible;
+  overflow-y: auto;
+}
+
+.sidebar h2 {
+  color: #042141;
+}
+
+.sidebar a {
+  text-decoration: none;
+}
+
+.titulo-sidebar {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 30px;
+  margin-bottom: 20px;
+  flex: 3;
+}
+
+.sidebar-toggle {
+  display: none;
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  background: #fde269;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 1200;
+  /* Asegura que está sobre el sidebar */
+}
+
+/* Estilos cuando la pantalla es menor a 900px */
+@media (max-width: 900px) {
+
+  .sidebar {
+    transform: translateX(-100%);
+    opacity: 0;
+    visibility: hidden;
+    width: 0;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out, visibility 0.3s ease-in-out, width 0.8s ease-in-out;
+  }
+
+  /* Estado abierto del sidebar */
+  .sidebar.open {
+    transform: translateX(0);
+    opacity: 1;
+    visibility: visible;
+    width: 100%;
+  }
+
+
+  /* Botón de alternar sidebar */
+  .sidebar-toggle {
+    display: block;
+  }
+}
+
+.user-menu-container {
+  width: 95%;
+}
+
+.lobo-aeie {
+  width: 100px;
+  height: 80px;
+  border-top-left-radius: 20px 50px;
+  border-bottom-left-radius: 20px 50px;
+  border-top-right-radius: 20px 50px;
+  border-bottom-right-radius: 20px 50px;
+  margin: 20%;
+  flex: 2;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  flex: 10;
+  width: 100%;
+}
+
+.menu-item {
+  color: #333;
+  text-decoration: none;
+  font-size: 1.2rem;
+  padding: 10px 0px;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  height: 4vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.menu-item.active {
+  background-color: #fde269;
+  color: #0d0d3a;
+}
+
+.menu-item:hover {
+  background-color: #fdd835;
+  color: #0d0d3a;
+}
+
+.container {
+  font-family: Arial, sans-serif;
+  background-color: #0d0d3a;
+  color: #333;
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  /* Evitar overflow en el contenedor principal */
+}
+
+.content {
+  background-color: #0d0d3a;
+  margin: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  /* Asegura que el contenido se alinee desde el principio */
+  overflow-y: auto;
+  /* Agregar desplazamiento vertical solo si es necesario */
+}
+
+.content::-webkit-scrollbar {
+  width: 8px;
+  /* Ancho de la barra */
+  height: 8px;
+  /* Altura de la barra horizontal */
+}
+
+.content::-webkit-scrollbar-track {
+  background: transparent;
+  /* Fondo del track (transparente) */
+}
+
+.content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.5);
+  /* Color translúcido del thumb */
+  border-radius: 10px;
+  /* Bordes redondeados */
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.7);
+  /* Color más claro al pasar el mouse */
+}
+
+.content::-webkit-scrollbar-corner {
+  background: transparent;
+  /* Esquina del scrollbar */
+}
+
+.logo {
+  width: 150px;
+  margin-top: 20px;
+  /* Dejar un margen en la parte superior */
+}
+
+@media (max-width: 1024px) {
+  .logo {
+    width: 120px;
+    /* Ajustar tamaño del logo en pantallas más pequeñas */
+  }
+}
+
+@media (max-width: 768px) {
+  .logo {
+    width: 100px;
+    /* Ajustar aún más en pantallas más pequeñas */
+  }
+}
+
+.inicio-container img {
+  border-radius: 20px;
+  height: 70%;
+  margin-top: 10px;
+}
+
+.inicio-container h1,
+.inicio-container p {
+  text-align: left;
+  color: #fff;
+}
+
+
+.inicio-container {
+  max-height: 70vh;
+}
+
+.search-container {
+  display: flex;
+  justify-content: left;
+  flex-wrap: wrap;
+  gap: 10vw;
+  width: 60vw;
+  padding: 10px;
+}
+
+.search-input-container strong {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.search-input {
+  font-size: 1rem;
+  width: 15vw;
+  border-radius: 5px;
+  padding: 1px 2px;
+  margin: 0;
+}
+
+.search-button-container {
+  display: flex;
+  justify-content: space-between;
+  padding-left: 10px;
+}
+
+.search-button {
+  font-size: 1rem;
+  padding: 5px 15px;
+  color: rgb(0, 0, 0);
+  background-color: white;
+  text-align: center;
+  border: solid rgba(255, 255, 255, 0.595) 1px;
+  border-radius: 5px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+  background-color: #1c54b2;
+  color: white;
+}
+
+button.search-button {
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+
+.product-editor-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #0d0d3a;
+  height: 100vh;
+  color: white;
+  padding: 20px;
+  margin: 20px;
+  max-width: 100%;
+
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+@media (max-width: 1000px ) {
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(5, 1fr);    
+  }
+  .product-editor-container {
+    max-height: 630px;
+    justify-content: start;
+  }
+}
+
+@media (max-width: 450px) {
+  .item-search-movil {
+    flex-direction: column;
+  }
+}
+
+.product {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #1c1c4b;
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+  color: white;
+  cursor: pointer;
+}
+
+.product h3,
+.product p {
+  margin: 10px 0px;
+}
+
+.product img {
+  width: 150px;
+  height: auto;
+  border-radius: 10px;
+}
+
+.product:hover {
+  background-color: #29294d;
+}
+
+.paginator {
+  margin-top: 40px;
+}
+
+/*Casilleros*/
+.casilleros-container {
+  display: flex;
+  width: 80%;
+  height: 70%;
+  align-items: flex-start;
+  /* Alinea la letra y casilleros al inicio */
+  gap: 1rem;
+  /* Espacio entre la letra y los casilleros */
+  font-size: 8rem;
+  color: white;
+  text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8);
+}
+
+.letra-bloque-landing {
+  flex-direction: column;
+}
+.letra-bloque {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  width: 30%;
+}
+
+.letra-bloque h1 {
+  font-size: 8rem;
+  transition: font-size 0.3s ease;
+}
+
+.bloque-casillero-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 70%;
+  height: 90%;
+}
+
+.bloque-casillero {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 0;
+  width: 60%;
+
+}
+
+.casillero {
+  position: relative;
+  border: none;
+  border-radius: 25px;
+  padding: 0;
+  margin: 0;
+  background-color: transparent;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  /* Ocupa toda la celda */
+}
+
+.casillero img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+}
+
+.casillero.red {
+  background-color: red;
+}
+
+.casillero.green {
+  background-color: green;
+}
+
+.casillero span {
+  position: absolute;
+  top: 75%;
+  /* Centrado verticalmente */
+  left: 65%;
+  /* Centrado horizontalmente */
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 1.2rem;
+  /* Tamaño del número */
+  font-weight: bold;
+  text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8);
+  /* Sombra para mejor contraste */
+  pointer-events: none;
+  /* No interfiere con clics */
+}
+
+@media (max-width: 1024px) {
+
+  .letra-bloque h1 {
+    font-size: 6rem;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .letra-bloque h1 {
+    font-size: 4rem;
+  }
+
+}
+
+@media (max-width: 480px) {
+
+  .letra-bloque h1 {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 450px) {
+  .casilleros-container {
+    flex-direction: column;
+  }
+  .letra-bloque-landing {
+    flex-direction:row;
+  }
+  .letra-bloque {
+    width: 100%;
+    flex-direction: row;
+  }
+  .bloque-casillero-container {
+    width: 100%;
+  }
+  .bloque-casillero {
+    width: 100%;
+  }
+  .letra-bloque h1 {
+    font-size: 6rem;
+  }
+  .logo {
+    margin: 0;
+  }
+}
+
+.table-horario th {
+  text-align: center;
+}
+
+.form-container {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  padding: 20px;
+}
+
+label {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.input-field {
+  width: 90%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #3f51b5;
+}
+
+.input-field[type="time"]::-webkit-outer-spin-button,
+.input-field[type="time"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+  color: #000;
+}
