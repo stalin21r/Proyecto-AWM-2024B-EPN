@@ -5,5 +5,5 @@ module.exports = (app) => {
   app.get('/api/turnos', VerificarToken, TurnoController.getTurnos)
   app.get('/api/turno/:id', VerificarToken, TurnoController.getTurnoById)
   app.put('/api/turno/:id', VerificarToken, TurnoController.updateTurno)
-  app.delete('/api/turno/:id', VerificarToken, TurnoController.deleteTurno)
+  app.delete('/api/turno/:id', VerificarToken, VerificarToken, TurnoController.deleteTurno)
 }
