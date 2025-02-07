@@ -104,6 +104,7 @@ export function Landing() {
               >
                 Stalin Garcia
               </NavLink>
+              <p style={{ color: '#3f69ff' }}>, Aldair Flor</p>
             </p>
           </div>
           <div className="landing-footer-contacts">
